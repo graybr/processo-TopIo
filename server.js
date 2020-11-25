@@ -38,9 +38,7 @@ downloadJson()
 // Serve static files
 // eslint-disable-next-line no-undef
 app.use(express.static(`${__dirname}/public`));
-app.post('/public/', function (req, res) {
-  res.send(downloadJson())
-})
+
 // Serve your app
 console.log('Served: http://localhost:' + port);
 app.listen(port);
