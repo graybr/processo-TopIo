@@ -1,2 +1,20 @@
-# processo-TopIo
-Processo seletivo da TOP.io
+# top-io
+
+## Project setup
+```
+yarn install
+```
+
+### Compiles and hot-reloads for development
+```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+# vuejs-store-test

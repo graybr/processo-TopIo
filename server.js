@@ -1,44 +1,17 @@
-var express = require('express');
-var app = express();
-var axios = require('axios').default;
-var Fs = require('fs')
-var Path = require('path')
-// eslint-disable-next-line no-undef
-var port = process.env.PORT || 8080;
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/testTOP', {useNewUrlParser: true, useUnifiedTopology: true});
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // we're connected!
-});
+const express = require('express')
+const serveStatic = require('serve-static')
+const path = require('path')
 
-async function downloadJson(id='python') {  
-  console.log('entrei')
-  const url = `https://api.github.com/search/repositories?q=language:${id}&sort=stars&per_page=100&page=1&order=desc`
-  const path = Path.resolve(__dirname, 'data', `${id}.json`)
-  const writer = Fs.createWriteStream(path)
+const app = express()
 
-  const response = await axios({
-    url,
-    method: 'GET',
-    responseType: 'stream'
-  })
+//here we are configuring dist to serve app files
+app.use('/', serveStatic(path.join(__dirname, '/dist')))
 
-  response.data.pipe(writer)
+// this * route is to serve project on different page routes except root `/`
+app.get(/.*/, function (req, res) {
+	res.sendFile(path.join(__dirname, '/dist/index.html'))
+})
 
-  return new Promise((resolve, reject) => {
-    writer.on('finish', resolve)
-    writer.on('error', reject)
-  })
-}
-
-downloadJson()
-
-// Serve static files
-// eslint-disable-next-line no-undef
-app.use(express.static(`${__dirname}/public`));
-
-// Serve your app
-console.log('Served: http://localhost:' + port);
-app.listen(port);
+const port = process.env.PORT || 8080
+app.listen(port)
+console.log(`app is listening on port: ${port}`)
